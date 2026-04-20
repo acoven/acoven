@@ -57,3 +57,7 @@ A personal AI assistant daemon that watches for events across iMessage, Google D
 
 *"Stays peaceful in the middle of any storm, and is incredibly articulate and constructive when problem solving."*
 -- Phil Clevenger, Product Experience Leader | Original designer of Adobe Lightroom
+
+### Resume
+
+[acoven.pdf](<./resume/acoven.pdf>)
