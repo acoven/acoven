@@ -60,4 +60,6 @@ A personal AI assistant daemon that watches for events across iMessage, Google D
 
 ### Resume
 
-[acoven.pdf](<https://cov.pub/acoven>)
+[acoven.pdf](<./resume/acoven.pdf>)
+
+\#\#\#
