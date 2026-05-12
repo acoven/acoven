@@ -1,0 +1,669 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>Andrew Coven</title>
+    <!-- set Page Setup to 95%, background graphics ON, Regex: "</span>\s*\n(\s*)<" → "</span\n$1><"  -->
+    <style type="text/css">
+      :root {
+        --resumeGrey: dimgrey;
+        --spacer-top-section: 0.50lh;       /* Main sections and entry blocks */
+        --spacer-bottom-section: -0.30lh;    /* Main sections and entry blocks */
+        --spacer-top-employment: 0.60lh; /* Positions, degrees, patents */
+        --spacer-bottom-employment: -0.20lh; /* Positions, degrees, patents */
+        --spacer-top-secondary: 0.40lh;  /* Secondary/nested positions */
+        --spacer-top-sub_section: 0.80lh;      /* Sub-sections and footer */
+        --spacer-bottom-sub_section: -0.50lh;      /* Sub-sections and footer */
+      }
+
+      html,
+      body {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-size: 10pt;
+      }
+
+      a:link,
+      a:visited {
+        color: blue; /* Replace with the color you want for the unfollowed link */
+        text-decoration: underline; /* Optional: if you want the link to be underlined */
+      }
+
+      .tldr {
+        text-align: center;
+        padding: 0 5% 0 5%;
+      }
+
+      .summary {
+        font-size: 100%;
+        font-style: normal;
+        font-weight: normal;
+      }
+
+      .name {
+        font-size: 160%;
+        font-weight: bolder;
+        font-variant: small-caps;
+      }
+
+      .obj {
+        font-size: 120%;
+        font-weight: bolder;
+      }
+
+      .emphasis {
+        font-style: italic;
+      }
+
+      .section {
+        font-size: 120%;
+        font-weight: bolder;
+        font-variant: small-caps;
+        margin-top: var(--spacer-top-section);
+        margin-bottom: var(--spacer-bottom-section);
+      }
+
+      .sub_section {
+        font-style: italic;
+        margin-top: var(--spacer-top-sub_section);
+        margin-bottom: var(--spacer-bottom-sub_section);
+      }
+
+      .employment,
+      .experience,
+      .patents,
+      .education,
+      .technical_skills,
+      .extracurriculars {
+        margin-left: 3ch;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        margin-top: var(--spacer-top-employment);
+        margin-bottom: var(--spacer-bottom-employment);
+      }
+
+      .employment > *,
+      .experience > *,
+      .patents > *,
+      .education > *,
+      .technical_skills > *,
+      .extracurriculars > * {
+        grid-column: 1;
+      }
+
+      .info_dates {
+        font-size: 80%;
+        font-style: italic;
+        white-space: nowrap;
+        grid-column: 2;
+        color: var(--resumeGrey);
+      }
+
+      .patent,
+      .degree,
+      .position {
+        font-size: 100%;
+        font-weight: bolder;
+      }
+
+      .secondary, .secondary .position {
+        font-weight: normal;
+        font-style: italic;
+        padding-top: var(--spacer-top-secondary);
+        padding-left: 0.5ch;
+      }
+
+      .patentNumber {
+        font-weight: normal;
+        font-style: normal;
+        font-size: 90%;
+      }
+
+      .companyName {
+        font-size: 90%;
+      }
+      .highlights {
+        margin-left: -0.5ch;
+        margin-right: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        grid-column: 1 / -1;
+        list-style: none;
+      }
+
+      .highlight {
+        font-size: 90%;
+        margin-left: -4ch;
+        margin-right: 5ch;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 2ch;
+      }
+
+      .highlight::before {
+        content: "✓   ";
+        margin-left: -3ch;
+        font-size: 1ch;
+        white-space: pre;
+      }
+
+      .footer {
+        padding-top: var(--spacer-top-sub_section);
+        font-size: small;
+        font-style: italic;
+      }
+
+      .heavy {
+        font-weight: bold;
+      }
+
+      .location {
+        font-size: 70%;
+        color: var(--resumeGrey);
+      }
+
+      .vertical-bar {
+        /* this was vertical-bar.png, and I'm moving it inline to have it be all in one document */
+        display: inline-block;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 1px; /* Width of image */
+        height: 1.01lh; /* 101% line height */
+        margin-left: 0.5ch;
+        margin-right: 0.5ch;
+        vertical-align: middle;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAABkCAYAAAE03rrLAAAAAXNSR0IArs4c6QAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAA9GVYSWZNTQAqAAAACAAHARIAAwAAAAEAAQAAARoABQAAAAEAAABiARsABQAAAAEAAABqASgAAwAAAAEAAgAAATEAAgAAACQAAAByATIAAgAAABQAAACWh2kABAAAAAEAAACqAAAAAAAAASwAAAABAAABLAAAAAFBZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKQAyMDE2OjA5OjEyIDA4OjQ1OjA1AAAEkAQAAgAAABQAAADgoAEAAwAAAAEAAQAAoAIABAAAAAEAAAADoAMABAAAAAEAAABkAAAAADIwMTY6MDk6MTEgMjE6MTE6MjMAZKDmUQAAAAlwSFlzAAAuIwAALiMBeKU/dgAAC6FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICAgICAgICAgICB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIKICAgICAgICAgICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx4bXA6TW9kaWZ5RGF0ZT4yMDE2LTA5LTEyVDA4OjQ1OjA1LTA3OjAwPC94bXA6TW9kaWZ5RGF0ZT4KICAgICAgICAgPHhtcDpDcmVhdG9yVG9vbD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwveG1wOkNyZWF0b3JUb29sPgogICAgICAgICA8eG1wOk1ldGFkYXRhRGF0ZT4yMDE2LTA5LTEyVDA4OjQ1OjA1LTA3OjAwPC94bXA6TWV0YWRhdGFEYXRlPgogICAgICAgICA8eG1wOkNyZWF0ZURhdGU+MjAxNi0wOS0xMVQyMToxMToyMy0wNzowMDwveG1wOkNyZWF0ZURhdGU+CiAgICAgICAgIDx4bXBNTTpJbnN0YW5jZUlEPnhtcC5paWQ6YmNkZGY0ZjEtMDg0OC00NDVlLThkMGItZTUwNTQ4YjI3NzI4PC94bXBNTTpJbnN0YW5jZUlEPgogICAgICAgICA8eG1wTU06RG9jdW1lbnRJRD54bXAuZGlkOjAzNmRhYzdhLWQ3ZjAtNDU5NS04YzIxLTY4Y2RmMjljMDJjMDwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD54bXAuZGlkOjAzNmRhYzdhLWQ3ZjAtNDU5NS04YzIxLTY4Y2RmMjljMDJjMDwveG1wTU06T3JpZ2luYWxEb2N1bWVudElEPgogICAgICAgICA8eG1wTU06SGlzdG9yeT4KICAgICAgICAgICAgPHJkZjpTZXE+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAxNi0wOS0xMVQyMToxMToyMy0wNzowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDowMzZkYWM3YS1kN2YwLTQ1OTUtOGMyMS02OGNkZjI5YzAyYzA8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+Y3JlYXRlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpzb2Z0d2FyZUFnZW50PkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE1IChNYWNpbnRvc2gpPC9zdEV2dDpzb2Z0d2FyZUFnZW50PgogICAgICAgICAgICAgICAgICA8c3RFdnQ6Y2hhbmdlZD4vPC9zdEV2dDpjaGFuZ2VkPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTA5LTExVDIxOjI0OjEwLTA3OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6aW5zdGFuY2VJRD54bXAuaWlkOmUwOWQ0MjVlLTljYWMtNDM1Zi05MTQ2LWVjYTAyN2NmY2YyYTwvc3RFdnQ6aW5zdGFuY2VJRD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmFjdGlvbj5zYXZlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpzb2Z0d2FyZUFnZW50PkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE1IChNYWNpbnRvc2gpPC9zdEV2dDpzb2Z0d2FyZUFnZW50PgogICAgICAgICAgICAgICAgICA8c3RFdnQ6Y2hhbmdlZD4vPC9zdEV2dDpjaGFuZ2VkPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTA5LTEyVDA4OjQ1OjA1LTA3OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6aW5zdGFuY2VJRD54bXAuaWlkOmJjZGRmNGYxLTA4NDgtNDQ1ZS04ZDBiLWU1MDU0OGIyNzcyODwvc3RFdnQ6aW5zdGFuY2VJRD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmFjdGlvbj5zYXZlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6U2VxPgogICAgICAgICA8L3htcE1NOkhpc3Rvcnk+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj4zPC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjEwMDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOkNvbG9yU3BhY2U+NjU1MzU8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9wbmc8L2RjOmZvcm1hdD4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CqUNzVQAAAA/SURBVDgRY7h58+Z/JgYgIJNgoMAASvSS6VyENkaQw+EeH4aMAQ1dRDgPAAsetSixOsoBhQA0o0OYoxwaBwgAahsWkTbzED0AAAAASUVORK5CYII=)
+          no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <no-img style="margin-bottom: -6px;" src="andrew_coven.jpg" alt="[Andrew Coven Picture]" width="120" height="180" /> -->
+    <div class="tldr" aria-label="contact">
+      <div class="name" aria-label="name">Andrew Coven</div>
+      <div class="obj" aria-label="title">Executive Technical Business Leader</div>
+      <div class="summary" aria-label="summary">Software engineering, technology, and business leader; thoughtful communicator; customer-advocate; coaching contributors into exceptional managers and leaders; digital media steward.</div>
+      <!-- Entrepreneur  → Multimedia Professor (1990-08-15) → Apple (1988-02-15) → Adobe (1994-02-15) → Netflix (2014-06-15) → Instart (2015-10-15) → Box (2016-10-15)→ Meta (2020-04-15) → Linqia (2023-03-15) → Output (2024-08-01) → KCL (2025-12-15...2026-04-31) → Fractional CTO (2025-07-02) -->
+      <div class="emphasis" aria-label="contact">Los Gatos, CA<span class="vertical-bar"></span
+        ><span aria-label="phone">+1 (408) 757-8987</span
+        ><span class="vertical-bar"></span
+        ><a href="mailto:a@cov.in" aria-label="email">a@cov.in</a>
+      </div>
+    </div>
+    <div class="section">Employment Experience</div>
+    <div class="employment" id="fcto_covenllc_20250702_present" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Fractional CTO</span><span class="vertical-bar"></span
+        ><a href="https://cov.in" class="companyName" aria-label="companyName">Coven LLC</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Los Gatos, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2025-07-02">Jul 2025</time></span
+        >&mdash;<span class="endDate" aria-label="endDate">present</span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">$40MM to $100MM+ evolving entire companies from content-led to product-led.</li>
+        <li class="highlight" aria-label="highlight">4x velocity gains implementing AI-first product and software dev lifecycle.</li>
+        <li class="highlight" aria-label="highlight">3x new user pipeline via 1<sup>st</sup>-party agentic search and 3<sup>rd</sup>-party partnerships using MCP.</li>
+        <li class="highlight" aria-label="highlight">100s of future leaders coached and mentored into executive positions.</li>
+        <li class="highlight" aria-label="highlight">-30% cost reduction in cloud costs from monolithic legacy-to-modern architecture migrations.</li>
+        <!-- KCL (2025-12-15...2026-04-31) -->
+      </ul>
+    </div>
+    <div class="employment" id="vpeng_output_20240801_20250701" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Vice President of Software Engineering</span><span class="vertical-bar"></span
+        ><a href="https://output.com" class="companyName" aria-label="companyName">Output, Inc.</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2024-08-01">Aug 2024</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2025-07-01">Jul 2025</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">$20MM+ revenue shipping ethical 1<sup>st</sup>-party agentic AI/ML product <a href="https://output.com/products/co-producer">Co-Producer</a>; product for beginners, <a href="https://output.com/products/creator">Creator</a>.</li>
+        <li class="highlight" aria-label="highlight">Scaled 25+ frontend (TypeScript, Vue3, Pinia, React, Redux), backend (Node.js, Ruby), desktop (Mac, Win, C/C++) devs.</li>
+        <li class="highlight" aria-label="highlight">3x velocity; led company AI adoption.</li>
+        <li class="highlight" aria-label="highlight">-30% cost reduction by consolidating tech stack from other clouds (Heroku, AWS) into GCP.</li>
+      </ul>
+    </div>
+    <div class="employment" id="vpeng_linqia_20230315_20240620" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Vice President of Software Engineering</span><span class="vertical-bar"></span
+        ><a href="https://linqia.com" class="companyName" aria-label="companyName">Linqia, Inc.</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2023-03-15">Mar 2023</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2024-06-20">Jun 2024</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Created eng job family and managed/grew 20+ frontend/full-stack (JavaScript), backend (Python, Node.js, Java) devs.</li>
+        <li class="highlight" aria-label="highlight">Led exploration and validation of new product enhancing AI/ML/ChatGPT-like capabilities.</li>
+        <li class="highlight" aria-label="highlight">-15% eng budget reduction transitioning offshore to nearshore.</li>
+        <li class="highlight" aria-label="highlight">-20% AWS spend reduction via DevOps tuning.</li>
+      </ul>
+    </div>
+    <div class="employment" id="sr-emgr_meta_20200415_20230120" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Engineering Leader of Ads Product Infrastructure</span><span class="vertical-bar"></span
+        ><a href="https://meta.com" class="companyName" aria-label="companyName">Meta/Facebook</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Menlo Park, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2020-04-15">Apr 2020</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2023-01-20">Jan 2023</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Senior Manager 50+ frontend/full-stack (JavaScript), backend (PHP/Hack) devs.</li>
+        <li class="highlight" aria-label="highlight">$100B+ yearly revenue protected as owner of availability/reliability/performance of Meta Ads Manager app.</li>
+        <li class="highlight" aria-label="highlight">4,000+ devs, 200+ teams quality increased from federated best practices and tools in my multi-year feature strategy.</li>
+        <li class="highlight" aria-label="highlight">Saved $100MM+ annually in lost revenue reducing downtime from 1 day/week to 6 minutes/week.</li>
+      </ul>
+    </div>
+    <div class="employment" id="sr-edir_box_20161015_20200420" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Head of Engineering for Platform and Extensibility</span><span class="vertical-bar"></span
+        ><a href="https://box.com" class="companyName" aria-label="companyName">Box, Inc.</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Redwood City, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2016-10-15">Oct 2016</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2020-04-20">Apr 2020</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Senior Director of Engineering 40+ frontend (JavaScript, React), backend (Scala, Java, PHP) devs.</li>
+        <li class="highlight" aria-label="highlight">Owned integrations: Blockchain, Microsoft, Google, Meta/Facebook, Slack, Apple; 3<sup>rd</sup>-party Portal, SDKs, Public APIs.</li>
+        <li class="highlight" aria-label="highlight">$1MM to $100MM+ Platform business growth.</li>
+        <li class="highlight" aria-label="highlight">Created and patented &ldquo;Box Skills&rdquo; machine learning interface.</li>
+      </ul>
+    </div>
+    <div class="employment" id="vpeng_instart_20151015_20161020" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Vice President of Engineering for Technical Services</span><span class="vertical-bar"></span
+        ><a href="https://web.archive.org/web/*/www.instart.com" class="companyName" aria-label="companyName">Instart, Inc.</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Palo Alto, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2015-10-15">Oct 2015</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2016-10-20">Oct 2016</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">VP of Solutions Engineering, Customer Support, Security Services, Professional Services.</li>
+        <li class="highlight" aria-label="highlight">Grew business to millions, securing top customers such as The Washington Post. Bought by Akamai, Apr 2020.</li>
+      </ul>
+    </div>
+    <div class="employment" id="edir_netflix_20140615_20150920" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Director of Engineering for Content Acquisition</span><span class="vertical-bar"></span
+        ><a href="https://netflix.com" class="companyName" aria-label="companyName">Netflix</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Los Gatos, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2014-06-15">Jun 2014</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2015-09-20">Sep 2015</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Responsible for ingest and deployment of all content appearing on Netflix site for 65MM+ customers.</li>
+        <li class="highlight" aria-label="highlight">Maintained <a href="https://backlot.netflix.com">backlot.netflix.com</a>, used by Hollywood/Worldwide studios to move content into Netflix.</li>
+        <li class="highlight" aria-label="highlight">40+ AWS microservices in Java, Grails, Node.js.</li>
+        <li class="highlight" aria-label="highlight">Created User Experience Design and Product Management teams for our org.</li>
+        <li class="highlight" aria-label="highlight">20% to 50%+ coverage improvement raising quality.</li>
+      </ul>
+    </div>
+    <div class="employment" id="sr-edir_adobe_19940215_20141220" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Senior Director of Engineering for Photoshop Products</span><span class="vertical-bar"></span
+        ><a href="https://adobe.com" class="companyName" aria-label="companyName">Adobe</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Jose, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1994-02-15">Feb 1994</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2014-12-20">Dec 2014</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">140-300+ global devs Photoshop/Extended/ImageReady/Lightroom/Bridge Mac and Win desktop/mobile/web.</li>
+        <li class="highlight" aria-label="highlight">$700MM to $1.5B+ Photoshop business growth; co-created and launched <a href="https://www.adobe.com/creativecloud.html">Creative Cloud</a>.</li>
+        <li class="highlight" aria-label="highlight">$0 to $1MM+ Photoshop Touch first six months; mobile/tablet iOS (Objective-C, C, C++), Android (Java, C).</li>
+        <li class="highlight" aria-label="highlight">0 to 1 Lightroom Mobile/Web: leading 9 devs in Hamburg, Germany.</li>
+      </ul>
+      <div class="secondary" id="edir_adobe_photoshop_20010103_20061222" aria-label="employment">
+        <span class="position" aria-label="position">Director of Engineering for Photoshop.com, Photoshop Express Mobile</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2001-01-03">Jan 2001</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2006-12-22">Dec 2006</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">$6MM to $12MM+ customer growth <a href="https://photoshop.com">Photoshop.com</a>: 50+ global team, HTML/CSS, Ruby on Rails, AWS.</li>
+        <li class="highlight" aria-label="highlight">2MM to 25MM+ downloads Photoshop Express: iOS, Android, Win Mobile.</li>
+      </ul>
+      <div class="secondary" id="sm_adobe_indesign_19970106_20011221" aria-label="employment">
+        <span class="position" aria-label="position">Senior Manager of Engineering for InDesign SDK, Dev Technologies, Moriarty</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1997-01-06">Jan 1997</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2001-12-21">Dec 2001</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">3 in Seattle to 12 devs internationally created InDesign 1.0/1.5/2.0 SDKs and workflow integrations.</li>
+        <li class="highlight" aria-label="highlight">20 to 80 worldwide devs for Dev relations/support/engineering.</li>
+        <li class="highlight" aria-label="highlight">Created Moriarty (Perl), streamlining bug deferral/reporting for 80+ teams, 2,000+ employees.</li>
+      </ul>
+      <div class="secondary" id="scs_adobe_sdk_19940215_19961220" aria-label="employment">
+        <span class="position" aria-label="position">Senior Computer Scientist for Photoshop APIs and SDK</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1994-02-15">Feb 1994</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1996-12-20">Dec 1996</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">10 to 1,200 3<sup>rd</sup>-party growth; created/maintained Photoshop APIs and SDK shipped with product.</li>
+      </ul>
+    </div>
+    <div class="experience" id="owner_g2t_20170101_present" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Steward</span><span class="vertical-bar"></span
+        ><a href="https://g2t.support" class="companyName" aria-label="companyName">Gmail2Trello</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Los Gatos, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2017-01-01">Jan 2017</time></span
+        >&mdash;<span class="endDate" aria-label="endDate">present</span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Gmail2Trello <a href="https://g2t.pub/github">open source</a> <a href="https://g2t.pub/chrome">Chrome extension</a
+            > moves Gmail into Trello. Rated 5/5, 7,000+ daily active users.</li>
+      </ul>
+    </div>
+    <div class="experience" id="bod_autovod_20040215_20161220" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Board of Directors</span><span class="vertical-bar"></span
+        ><a href="https://autovod.com" class="companyName" aria-label="companyName">Autovod</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Plano, TX</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2004-02-15">Feb 2004</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2016-12-20">Dec 2016</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Advised and guided growth of <a href="https://autovod.com">autovod.com</a
+            >, online learning and interactive media system for clients such as Cisco.</li>
+      </ul>
+    </div>
+    <div class="employment" id="cto_firstexposure_19940215_19981220" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Chief Technical Officer</span><span class="vertical-bar"></span
+        ><a href="https://web.archive.org/web/*/www.firstexposure.com" class="companyName" aria-label="companyName">First Exposure</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1994-02-15">Feb 1994</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1998-12-20">Dec 1998</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Web banner advertising agency. Created online digital motion banners for advertising agencies.</li>
+      </ul>
+    </div>
+    <div class="employment" id="projmgr_qa_massmicro_19910215_19931220" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Engineering Project Manager and Quality Engineer</span><span class="vertical-bar"></span
+        ><a href="https://web.archive.org/web/*/www.massmicro.com" class="companyName" aria-label="companyName">Mass Microsystems</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Sunnyvale, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1991-02-15">Feb 1991</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1993-12-20">Dec 1993</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Zorro! cuts-only video editor, DriveMASSter&trade; Mac/Win software. Product strategy, project management, marketing, quality.</li>
+      </ul>
+    </div>
+    <div class="employment" id="assoc_prof_sfsu_foothill_deanza_19900815_19960520" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Associate Professor</span><span class="vertical-bar"></span
+        ><span class="companyName" aria-label="companyName"
+          ><a href="https://beca.sfsu.edu">San Francisco State University</a>, <a href="https://foothill.edu">Foothill</a> and <a href="https://deanza.edu">De Anza Colleges</a></span
+        ><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">SF Bay Area, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1990-08-15">Aug 1990</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1996-05-20">May 1996</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Created/taught Advanced Video Editing and Production classes: Intro TV, Advanced TV, Electronic Field, Digital Video.</li>
+      </ul>
+    </div>
+    <div class="employment" id="founder_appliedmedia_19880215_19971220" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Founder</span><span class="vertical-bar"></span
+        ><a href="https://www.appliedmedia.com" class="companyName" aria-label="companyName">Applied Media&reg;</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1988-02-15">Feb 1988</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1997-12-20">Dec 1997</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Creator: Outpatient&reg; 200+ function API ledger; Flapjack&trade; 20K+ item inventory manager; Grade-A&trade; gradebook.</li>
+      </ul>
+    </div>
+    <div class="employment" id="sm_apple_monaco_19880215_19951220" aria-label="employment">
+      <div class="info_role">
+        <span class="position" aria-label="position">Stage Manager; Video Engineer</span><span class="vertical-bar"></span
+        ><span class="companyName" aria-label="companyName"><a href="https://apple.com">Apple-TV</a>, <a href="https://web.archive.org/web/*/monacosf.com">Monaco Digital Film Labs</a></span><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Bay Area, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1988-02-15">Feb 1988</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1995-12-20">Dec 1995</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Apple-TV: Created and ran process for external video production vendors in Apple&rsquo;s television facility.</li>
+        <li class="highlight" aria-label="highlight">Monaco: Video technician at film-to-tape transfer facility for films such as <i>The Nightmare Before Christmas</i>.</li>
+      </ul>
+    </div>
+    <div class="section">Publications / Instruction / Volunteering</div>
+    <div class="experience" id="board_monkeytail_20200101_present" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Board Member/Volunteer</span><span class="vertical-bar"></span
+        ><a href="https://monkeytailranch.org" class="companyName" aria-label="companyName">Monkey Tail Ranch</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Hollister, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2020-01-01">Jan 2020</time></span
+        >&mdash;<span class="endDate" aria-label="endDate">present</span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Board member/volunteer at non-profit providing trained therapy animals to facilities.</li>
+      </ul>
+    </div>
+    <div class="experience" id="mentor_joinwest_20160101_present" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Coach/Mentor</span><span class="vertical-bar"></span
+        ><a href="https://joinwest.org" class="companyName" aria-label="companyName">Women Entering and Staying in Tech</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Los Gatos, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2016-01-01">Jan 2016</time></span
+        >&mdash;<span class="endDate" aria-label="endDate">present</span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Coach/mentor for women and transgender individuals in software.</li>
+      </ul>
+    </div>
+    <div class="experience" id="volunteer_hourofcode_20140915_20190715" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Volunteer</span><span class="vertical-bar"></span
+        ><span class="companyName" aria-label="companyName">Bay Area Elementary Schools</span><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Bay Area, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2014-08-15">Aug 2014</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2019-07-15">Jul 2019</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Hosted in-person kick-off assembly at schools for &ldquo;Hour of Code&rdquo; for at-risk youth.</li>
+      </ul>
+    </div>
+    <div class="experience" id="blog_cov_20080101_present" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Author</span
+        ><span class="vertical-bar"></span><a href="https://www.cov.in" class="companyName" aria-label="companyName">www.cov.in</a
+        ><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Los Gatos, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2008-01-01">Jan 2008</time></span
+        >&mdash;<span class="endDate" aria-label="endDate">present</span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Create. Connect. Inspire. Learn. Pivot. Applied Media Aesthetics and thoughts about new media.</li>
+      </ul>
+    </div>
+    <div class="experience" id="instructor_sfsu_20040815_20220915" aria-label="experience">
+        <div class="info_role">
+          <span class="position" aria-label="position">Guest Lecturer</span><span class="vertical-bar"></span
+          ><a href="https://beca.sfsu.edu" class="companyName" aria-label="companyName">San Francisco State University</a><span class="vertical-bar"></span
+          ><span class="location" aria-label="location">San Francisco, CA</span
+        ></div>
+        <span class="info_dates"
+          ><span class="startDate" aria-label="startDate"><time datetime="2004-08-15">Aug 2004</time></span
+          >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2022-09-15">Sep 2022</time></span
+        ></span>
+        <ul class="highlights" aria-label="highlights">
+          <li class="highlight" aria-label="highlight">BECA 301 Media Literacy Lecture &ldquo;Perception and Photoshop&rdquo;: Body image, truth in imagery, child exploitation.</li>
+          <li class="highlight" aria-label="highlight">BECA 422 Social Aspects of Public Media Lecture &ldquo;New Media&rdquo;: The internet, emoticons, chat protocols.</li>
+      </ul>
+    </div>
+    <div class="experience" id="volunteer_lawfoundation_20000101_20221021" aria-label="experience">
+      <div class="info_role">
+        <span class="position" aria-label="position">Fundraising Volunteer</span><span class="vertical-bar"></span
+        ><a href="https://lawfoundation.org" class="companyName" aria-label="companyName">Law Foundation of Silicon Valley</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Jose, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2000-01-01">Jan 2000</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2022-10-21">Oct 2022</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Technical support for non-profit legal aid organization.</li>
+      </ul>
+    </div>
+    <div class="section">Patents</div>
+    <div class="patents" id="patent_11379686_20220705" aria-label="patents">
+      <div class="info_role">
+        <span class="patent" aria-label="patent">Deploy Data Process Service Plug-ins Cloud-based Collaboration Platform</span><span class="vertical-bar"></span
+        ><a href="https://cov.pub/uspto-pdf/11379686" class="patentNumber" aria-label="patentNumber">US-11379686-B2</a>
+      </div>
+      <span class="info_dates"
+        ><span class="date" aria-label="date"><time datetime="2022-07-05">Jul 2022</time></span
+      ></span>
+    </div>
+    <div class="patents" id="patent_11074475_20210727" aria-label="patents">
+      <div class="info_role">
+        <span class="patent" aria-label="patent">Integrate External Data Process Technology Cloud-based Collaboration Platform</span><span class="vertical-bar"></span
+        ><a href="https://cov.pub/uspto-pdf/11074475" class="patentNumber" aria-label="patentNumber">US-11074475-B2</a>
+      </div>
+      <span class="info_dates"
+        ><span class="date" aria-label="date"><time datetime="2021-07-27">Jul 2021</time></span
+      ></span>
+    </div>
+    <div class="patents" id="patent_10908926_20210202" aria-label="patents">
+      <div class="info_role">
+        <span class="patent" aria-label="patent">Plug-in Management Wrappers</span><span class="vertical-bar"></span
+        ><a href="https://cov.pub/uspto-pdf/10908926" class="patentNumber" aria-label="patentNumber">US-10908926-B2</a>
+      </div>
+      <span class="info_dates"
+        ><span class="date" aria-label="date"><time datetime="2021-02-02">Feb 2021</time></span
+        ></span
+      >
+    </div>
+    <div class="patents" id="patent_10867209_20201215" aria-label="patents">
+      <div class="info_role">
+        <span class="patent" aria-label="patent">Combine Output Data Process Service Cloud-based Collaboration Platform</span><span class="vertical-bar"></span
+        ><a href="https://cov.pub/uspto-pdf/10867209" class="patentNumber" aria-label="patentNumber">US-10867209-B2</a>
+      </div>
+      <span class="info_dates"
+        ><span class="date" aria-label="date"><time datetime="2020-12-15">Dec 2020</time></span
+        ></span
+      >
+    </div>
+    <div class="section">Education</div>
+    <div class="education" id="mba_scu_20071212" aria-label="education">
+      <div class="info_role">
+        <span class="degree" aria-label="degree">Master Business Admin (MBA)</span><span class="vertical-bar"></span
+        ><span class="major" aria-label="major">Executive Leadership</span><span class="vertical-bar"></span
+        ><a href="https://scu.edu" class="school" aria-label="school">Santa Clara Univ</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">Santa Clara, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="2005-09-18">Sep 2006</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="2007-12-07">Dec 2007</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Beta Gamma Sigma. Winning Venture Proposal: Doriot Medical MRI Console.</li>
+      </ul>
+    </div>
+    <div class="education" id="ma_sfsu_19940615" aria-label="education">
+      <div class="info_role">
+        <span class="degree" aria-label="degree">Master of Arts (MA)</span><span class="vertical-bar"></span
+        ><span class="major" aria-label="major">Broadcast Communications</span><span class="vertical-bar"></span
+        ><a href="https://beca.sfsu.edu" class="school" aria-label="school">San Francisco State Univ</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1992-08-15">Aug 1992</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1994-06-15">Jun 1994</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Summa Cum Laude. Emphasis: Multimedia Communication Theories. Thesis: Interactive Television.</li>
+      </ul>
+    </div>
+    <div class="education" id="ba_sfsu_19920615" aria-label="education">
+      <div class="info_role">
+        <span class="degree" aria-label="degree">Bachelor of Arts (BA)</span><span class="vertical-bar"></span
+        ><span class="major" aria-label="major">Broadcast Communications</span><span class="vertical-bar"></span
+        ><a href="https://beca.sfsu.edu" class="school" aria-label="school">San Francisco State Univ</a><span class="vertical-bar"></span
+        ><span class="location" aria-label="location">San Francisco, CA</span
+      ></div>
+      <span class="info_dates"
+        ><span class="startDate" aria-label="startDate"><time datetime="1990-08-15">Aug 1990</time></span
+        >&mdash;<span class="endDate" aria-label="endDate"><time datetime="1992-06-15">Jun 1992</time></span
+      ></span>
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Magna Cum Laude. Emphasis: Video/Computer Integration Engineering.</li>
+      </ul>
+    </div>
+    <div class="sub_section">Technical Stack</div>
+    <div class="technical_skills" aria-label="technical-skills">
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Java, JavaScript, JQuery, Kotlin, Node.js, Python, Ruby/Rails, Scala, Swift, TypeScript.</li>
+        <li class="highlight" aria-label="highlight">Bash, C, C++, Golang, Hack, HHVM, iOS, OCaml, Objective-C, Perl, PHP, Rust, Zsh.</li>
+        <li class="highlight" aria-label="highlight">Anthropic, ChatGPT, Claude, Cursor, Gemini, Grok, OpenAI, pgVector, Pinecone, PyTorch, TensorFlow.</li>
+        <li class="highlight" aria-label="highlight">FastAPI, GraphQL, Jest, Kafka, MongoDB, MySQL, PostgreSQL, PYTest, React, Redis, SQL, Vue, Vite, Webpack.</li>
+        <li class="highlight" aria-label="highlight">Asana, Confluence, Figma, IntelliJ, Jira, Microsoft Dev Studio, Notion, VSCode, Xcode.</li>
+        <li class="highlight" aria-label="highlight">AWS, BitBucket, Chef, CircleCI, Docker, GCP, GitHub, GitHub Actions, GitLab, Heroku, Jenkins, Kubernetes.</li>
+        <li class="highlight" aria-label="highlight">DataDog, Elasticsearch, ELK, Grafana, LambdaLabs, Memcached, New Relic, PostHog, Puppet, Splunk, Terraform.</li>
+        <li class="highlight" aria-label="highlight">Auth0, Blockchain,Encryption, JWT, OAuth, Postman, SSL/TLS.</li>
+        <li class="highlight" aria-label="highlight">6502 assembly, Agile and Lean Processes, CSS, HTML, HyperTalk, JSON, Netflix Culture, XML.</li>
+      </ul>
+    </div>
+    <div class="sub_section">Extracurriculars</div>
+    <div class="extracurriculars" , aria-label="extracurriculars">
+      <ul class="highlights" aria-label="highlights">
+        <li class="highlight" aria-label="highlight">Aikido black belt, Play in band, Leadership development, Volleyball, Yoga, SMPTE, IEEE, ASCAP.</li>
+      </ul>
+    </div>
+    <div class="sub_section" style="font-style: normal">References available on request.</div>
+    <div class="footer">
+      <a href="https://cov.pub/linkedin">linkedin</a><span class="vertical-bar"></span
+      ><a href="https://www.cov.in">blog</a><span class="vertical-bar"></span
+      ><a href="https://cov.pub/medium">medium</a><span class="vertical-bar"></span
+      ><a href="https://cov.pub/github">github</a><span class="vertical-bar"></span
+      ><a href="https://cov.pub/gitlab">gitlab</a><span class="vertical-bar"></span
+      ><a href="https://cov.pub/x-twitter">x/twitter</a><span class="vertical-bar"></span
+      ><!-- Copyright &copy; 1990... -->2026-05-05<!-- :a@cov.in. All Rights Reserved. -->
+    </div>
+  </body>
+</html>
