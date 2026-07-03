@@ -1,8 +1,8 @@
 # acoven_blurb.md
 
-v2026-04-20.001
+v2026-05-18.001
 
-Create. Connect. Inspire. Learn. Pivot. Software engineering, technology, and business leader; diversity advocate; thoughtful communicator; customer champion; coaching contributors into exceptional managers and leaders; digital media steward. [https://cov.in](<https://cov.in>). Entrepreneur → Multimedia Professor → Apple → Adobe → Netflix → Instart → Box → Meta → Linqia → Output → KCL → Fractional CTO
+Create. Connect. Inspire. Learn. Pivot. Software engineering, technology, and business leader; diversity advocate; thoughtful communicator; customer champion; coaching contributors into exceptional managers and leaders; digital media steward. [https://cov.in](<https://cov.in>). Entrepreneur → Multimedia Professor → Apple → Adobe → Netflix → Instart → Box → Meta → Linqia → Output → KCL → Claiyr → Fractional CTO → Adobe.
 
 * Entrepreneur (1988-02-15)
 * Multimedia Professor (1990-08-15)
@@ -15,6 +15,8 @@ Create. Connect. Inspire. Learn. Pivot. Software engineering, technology, and bu
 * Linqia (2023-03-15)
 * Output (2024-08-01)
 * KCL (2025-12-15...2026-04-31)
+* Claiyr (2026-02-15)
 * Fractional CTO (2025-07-02)
+* Adobe (2026-05-18)
 
 <!-- end acoven_blurb.md -->
